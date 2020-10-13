@@ -26,6 +26,14 @@ import numpy as np
 import pandas as pd
 import pickle
 import json
+import math
+import matplotlib.pyplot as plt 
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.model_selection import RandomizedSearchCV
+
+
 
 def _preprocess_data(data):
     """Private helper function to preprocess data for model prediction.
@@ -45,6 +53,28 @@ def _preprocess_data(data):
         The preprocessed data, ready to be used our model for prediction.
 
     """
+    #Import data and remove whitespace from columns
+    data = pd.read_csv('Model_data/Train.csv')
+    data.columns = [col.replace(' ','_') for col in data.columns]
+    #data.info()
+
+    #Check for and remove anomalies
+    outliers = data[data['Placement_-_Day_of_Month'] != data['Arrival_at_Destination_-_Day_of_Month']]
+    data = data.drop(outliers.index, axis=0)
+    data = data.fillna(data.mean())
+
+    #Create function that will be applied to time columns (feature engineering) to make them more usable in model
+    # takes time e.g. 10:30:00 AM and converts it to datetime object and then formats it as a float 10.50 that model can use
+    def converter (column):
+        out = []
+        for value in column.values:
+            work = pd.to_datetime(value)
+            hour = str(int(work.hour))
+            minute = str(int(work.minute/60*100))
+            out.append(float(hour+'.'+minute))
+        return pd.Series(out)
+
+
     # Convert the json string to a python dictionary object
     feature_vector_dict = json.loads(data)
     # Load the dictionary as a Pandas DataFrame.
