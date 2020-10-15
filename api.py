@@ -25,12 +25,12 @@ from model import load_model, make_prediction
 from flask import Flask, request, jsonify
 
 # Application definition
-app = Flask(__name__)
+app = Flask(_name_)
 
 # Load our model into memory.
 # Please update this path to reflect your own trained model.
 static_model = load_model(
-    path_to_model='assets/trained-models/sendy_simple_lm_regression.pkl')
+    path_to_model='assets/trained-models/mlr_model.pkl') # we need to update with the latest model
 
 print ('-'*40)
 print ('Model succesfully loaded')
@@ -56,5 +56,5 @@ def model_prediction():
 # When developing your API, set `debug=True`
 # This will allow Flask to automatically restart itself everytime you
 # update your API code.
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+if _name_ == '__main__':
+    app.run(host='34.244.213.180', port=5000, debug=True)
