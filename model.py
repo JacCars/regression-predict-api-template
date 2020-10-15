@@ -53,7 +53,7 @@ def _preprocess_data(data):
         The preprocessed data, ready to be used our model for prediction.
 
     """
-   
+    Test = pd.read_csv('Test.csv')
     Train.columns = [col.replace(' ', '_') for col in Train.columns] # Replaced the spaces so column names are easier to work with
     Test.columns = [col.replace(' ', '_') for col in Test.columns] # Replaced the spaces so column names are easier to work with
     
