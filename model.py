@@ -33,9 +33,6 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.model_selection import RandomizedSearchCV
 
-
- Train = pd.read_csv('Train.csv')
- Test = pd.read_csv('Test.csv')
 def _preprocess_data(data):
     """Private helper function to preprocess data for model prediction.
 
@@ -54,9 +51,10 @@ def _preprocess_data(data):
         The preprocessed data, ready to be used our model for prediction.
 
     """
-   
+    Train = pd.read_csv('Train.csv')
     Train.columns = [col.replace(' ', '_') for col in Train.columns] # Replaced the spaces so column names are easier to work with 
     
+    Test = pd.read_csv('Test.csv')
     Test.columns = [col.replace(' ', '_') for col in Test.columns] # Replaced the spaces so column names are easier to work with
     
     ftrain = Train.fillna(0, axis=1)
