@@ -34,7 +34,8 @@ from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.model_selection import RandomizedSearchCV
 
 
-
+ Train = pd.read_csv('Train.csv')
+ Test = pd.read_csv('Test.csv')
 def _preprocess_data(data):
     """Private helper function to preprocess data for model prediction.
 
@@ -53,10 +54,32 @@ def _preprocess_data(data):
         The preprocessed data, ready to be used our model for prediction.
 
     """
-    Test = pd.read_csv('Test.csv')
-    Train.columns = [col.replace(' ', '_') for col in Train.columns] # Replaced the spaces so column names are easier to work with
+   
+    Train.columns = [col.replace(' ', '_') for col in Train.columns] # Replaced the spaces so column names are easier to work with 
+    
     Test.columns = [col.replace(' ', '_') for col in Test.columns] # Replaced the spaces so column names are easier to work with
     
+    ftrain = Train.fillna(0, axis=1)
+    ftest = Test.fillna(0, axis=1)
+
+    test_cols = ftest.columns #getting a list of the columns in test set
+    newtrain = ftrain[test_cols] #Re-defining the training set to only incude those columns
+    y = np.array(ftrain["Time_from_Pickup_to_Arrival"]).reshape(-1, 1) # assigning the target variable
+    
+    df = pd.concat([newtrain, ftest])
+
+    df = df.drop(['Placement_-_Weekday_(Mo_=_1)', 'Confirmation_-_Day_of_Month', 'Confirmation_-_Weekday_(Mo_=_1)', 'Arrival_at_Pickup_-_Day_of_Month', 'Arrival_at_Pickup_-_Weekday_(Mo_=_1)', 'Pickup_-_Day_of_Month', 'Pickup_-_Weekday_(Mo_=_1)', 'Placement_-_Time', 'Confirmation_-_Time', 'Arrival_at_Pickup_-_Time', 'Pickup_-_Time'], axis = 1)
+    
+    df_final = df.drop(['Order_No', 'User_Id', 'Vehicle_Type', 'Rider_Id'], axis = 1) #Droppinf Id's
+    
+    df_final = pd.get_dummies(df_final ,drop_first=True)
+
+    # y = np.array(ftrain["Time_from_Pickup_to_Arrival"]).reshape(-1, 1) # assigning the target variable
+    finaltrain =df_final[:len(Train)]
+    finaltest = df_final[len(Train):]
+
+    x_train, x_val, y_train, y_val = train_test_split(finaltrain, y, test_size = 0.2)
+
     # Convert the json string to a python dictionary object
     feature_vector_dict = json.loads(data)
     # Load the dictionary as a Pandas DataFrame.
