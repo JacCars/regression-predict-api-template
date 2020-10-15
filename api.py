@@ -25,7 +25,7 @@ from model import load_model, make_prediction
 from flask import Flask, request, jsonify
 
 # Application definition
-app = Flask(_name_)
+app = Flask(Team_7)
 
 # Load our model into memory.
 # Please update this path to reflect your own trained model.
@@ -56,5 +56,5 @@ def model_prediction():
 # When developing your API, set `debug=True`
 # This will allow Flask to automatically restart itself everytime you
 # update your API code.
-if _name_ == '__main__':
+if Team_7 == '__main__':
     app.run(host='34.244.213.180', port=5000, debug=True)
