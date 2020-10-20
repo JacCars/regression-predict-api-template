@@ -56,8 +56,8 @@ def _preprocess_data(data):
 
     """
 
-    train = pd.read_csv('data/Train.csv')
-    test = pd.read_csv('data/Test.csv')
+    train = pd.read_csv('data/train_data.csv')
+    test = pd.read_csv('data/test_data.csv')
     riders_df = pd.read_csv('data/riders.csv')
 
     ### Train set:
