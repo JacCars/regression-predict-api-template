@@ -106,22 +106,24 @@ def _preprocess_data(data):
     # Circularity of time not important since we only work within one day timeframes
 
     def converter (column):
-    '''
-    Function converts datetime objects (hours and min) to float (e.g. 10:30 --> 10.50)
-    column: datetime column to be converted to float
-    returns: pd.Series of same dimensions that can replace datetime column
-    '''
-    out = []
-    for value in column.values:
-        try:
-            work = pd.to_datetime(value)
-            hour = str(int(work.hour))
-            minute = str(int(work.minute/60*100))
-            out.append(float(hour+'.'+minute))
-        except:
-            hour, minute = str(int(value.seconds // 3600)), str(int(value.seconds // 60 % 60))
-            out.append(float(hour+'.'+minute))
-    return pd.Series(out)
+
+        '''
+        Function converts datetime objects (hours and min) to float (e.g. 10:30 --> 10.50)
+        column: datetime column to be converted to float
+        returns: pd.Series of same dimensions that can replace datetime column
+        '''
+
+        out = []
+        for value in column.values:
+            try:
+                work = pd.to_datetime(value)
+                hour = str(int(work.hour))
+                minute = str(int(work.minute/60*100))
+                out.append(float(hour+'.'+minute))
+            except:
+                hour, minute = str(int(value.seconds // 3600)), str(int(value.seconds // 60 % 60))
+                out.append(float(hour+'.'+minute))
+        return pd.Series(out)
 
     
     # Convert string objects to datetime objects for every time feature
@@ -180,9 +182,9 @@ def _preprocess_data(data):
     train = train.drop(dest_cols, axis=1)  
 
     # Convert the json string to a python dictionary object
-    feature_vector_dict = json.loads(data)
+    #feature_vector_dict = json.loads(data)
     # Load the dictionary as a Pandas DataFrame.
-    feature_vector_df = pd.DataFrame.from_dict([feature_vector_dict])
+    #feature_vector_df = pd.DataFrame.from_dict([feature_vector_dict])
 
     # ---------------------------------------------------------------
     # NOTE: You will need to swap the lines below for your own data
@@ -193,11 +195,11 @@ def _preprocess_data(data):
     # ---------------------------------------------------------------
 
     # ----------- Replace this code with your own preprocessing steps --------
-    predict_vector = df.fillna(1)
+    #predict_vector = feature_vector_df.fillna(1)
                         
     # ------------------------------------------------------------------------
 
-    return predict_vector
+    #return predict_vector
 
 def load_model(path_to_model:str):
     """Adapter function to load our pretrained model into memory.
@@ -235,8 +237,6 @@ def make_prediction(data, model):
     """
     # Data preprocessing.
     prep_data = _preprocess_data(data)
-    # Perform prediction with model and preprocessed data.
-    prediction = model.predict(prep_data)
-    # Format as list for output standerdisation.
-    return prediction[0].tolist()
+    prediction = model.predict(prep_data) # Perform prediction with model and preprocessed data.
+    return prediction[0].tolist() # Format as list for output standerdisation.
 
