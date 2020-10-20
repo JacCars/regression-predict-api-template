@@ -1,5 +1,4 @@
 """
-
     Helper functions for the pretrained model to be used within our API.
 
     Author: Explore Data Science Academy.
